@@ -1,0 +1,22 @@
+apply plugin: 'java'
+apply plugin: 'application'
+
+
+repositories {
+    mavenCentral()  
+}
+
+dependencies {
+    compile 'net.htmlparser.jericho:jericho-html:3.3'
+    compile 'org.pircbotx:pircbotx:2.0.1'
+    compile 'org.slf4j:slf4j-log4j12:1.7.7'
+    testCompile 'junit:junit:4.11'
+}
+
+mainClassName = 'net.peercoin.Shoutbox2IRC'
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '1.12'
+}
+
+
