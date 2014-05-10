@@ -118,7 +118,6 @@ public class Shoutbox2IRC {
 			HttpURLConnection conn = (HttpURLConnection) new URL(
 					this.cookie == null ? (url + ";restart") : url)
 					.openConnection();
-			System.out.println(conn.getURL());
 			if (this.cookie != null)
 				conn.setRequestProperty("Cookie", cookie);
 			String cookie = conn.getHeaderField("Set-Cookie");
@@ -141,7 +140,7 @@ public class Shoutbox2IRC {
 	public static void main(String[] args) throws Exception {
 		if (args.length != 4) {
 			System.err.println("usage:\n"
-					+ "\tshoutbox2irc irc.freenode.net nick password #channel");
+					+ "\tshoutbox2irc irc.freenode.net nick password '#channel'");
 			System.exit(-1);
 		}
 		// IRC
@@ -159,7 +158,7 @@ public class Shoutbox2IRC {
 
 		final PircBotX bot = new PircBotX(new Configuration.Builder<PircBotX>()
 				.setServerHostname(server)
-				.setName("ppc-shoutbox")
+				.setName(nick)
 				.setLogin("LQ")
 				.addAutoJoinChannel(channel)
 				// .setCapEnabled(true)
