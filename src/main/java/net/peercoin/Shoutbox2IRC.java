@@ -91,7 +91,7 @@ public class Shoutbox2IRC {
 					continue;
 				String user = tds.get(0).getFirstElement("a")
 						.getTextExtractor().toString();
-				String msg = ShoutboxExtractor.extract(tds.get(1).getFirstElement("span"));
+				String msg = ShoutboxExtractor.extract(tds.get(1));
 				items.add(new Item(user, msg));
 			}
 			return items;
