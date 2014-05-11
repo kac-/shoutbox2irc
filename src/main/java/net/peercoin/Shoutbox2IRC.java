@@ -166,7 +166,7 @@ public class Shoutbox2IRC {
 					@Override
 					public void onJoin(JoinEvent<PircBotX> event)
 							throws Exception {
-						event.getChannel().send().message("hello!");
+						//event.getChannel().send().message("hello!");
 						joined.set(true);
 					}
 				}).setNickservPassword(password).setName(nick)
@@ -193,6 +193,7 @@ public class Shoutbox2IRC {
 			};
 		}.start();
 
+		source.get();
 		while (run.get()) {
 			if (joined.get()) {
 				for (SmfShoutboxParser.Item item : source.get())
