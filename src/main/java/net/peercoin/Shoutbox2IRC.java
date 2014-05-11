@@ -15,6 +15,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import net.htmlparser.jericho.ShoutboxExtractor;
 import net.htmlparser.jericho.Source;
 
 import org.pircbotx.Configuration;
@@ -90,7 +91,7 @@ public class Shoutbox2IRC {
 					continue;
 				String user = tds.get(0).getFirstElement("a")
 						.getTextExtractor().toString();
-				String msg = tds.get(1).getTextExtractor().toString();
+				String msg = ShoutboxExtractor.extract(tds.get(1).getFirstElement("span"));
 				items.add(new Item(user, msg));
 			}
 			return items;
