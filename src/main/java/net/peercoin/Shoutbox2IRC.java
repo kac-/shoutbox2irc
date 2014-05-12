@@ -22,6 +22,8 @@ import org.pircbotx.Configuration;
 import org.pircbotx.PircBotX;
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.JoinEvent;
+import org.pircbotx.hooks.events.MessageEvent;
+import org.pircbotx.hooks.events.PrivateMessageEvent;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.InputSource;
@@ -140,8 +142,9 @@ public class Shoutbox2IRC {
 
 	public static void main(String[] args) throws Exception {
 		if (args.length != 4) {
-			System.err.println("usage:\n"
-					+ "\tshoutbox2irc irc.freenode.net nick password '#channel'");
+			System.err
+					.println("usage:\n"
+							+ "\tshoutbox2irc irc.freenode.net nick password '#channel'");
 			System.exit(-1);
 		}
 		// IRC
@@ -150,6 +153,7 @@ public class Shoutbox2IRC {
 		String password = args[2];
 		String channel = args[3];
 
+		final String callbackMessage = "I'm shoutbox bot, please visit https://www.peercointalk.org/ to reply (registration required)";
 		String urlStr = "http://www.peercointalk.org/index.php?action=shoutbox;sa=get;xml;row=20";
 		SmfShoutboxMessageSource source = new SmfShoutboxMessageSource(urlStr,
 				Charset.forName("utf-8"));
@@ -167,9 +171,31 @@ public class Shoutbox2IRC {
 					@Override
 					public void onJoin(JoinEvent<PircBotX> event)
 							throws Exception {
-						//event.getChannel().send().message("hello!");
+						// event.getChannel().send().message("hello!");
 						joined.set(true);
 					}
+
+					@Override
+					public void onMessage(MessageEvent<PircBotX> event)
+							throws Exception {
+						if (event.getMessage().startsWith(
+								event.getBot().getNick() + ":")) {
+							if (event.getChannel() != null) {
+								event.getChannel()
+										.send()
+										.message(event.getUser(),
+												callbackMessage);
+							}
+						}
+					}
+
+					@Override
+					public void onPrivateMessage(
+							PrivateMessageEvent<PircBotX> event)
+							throws Exception {
+						event.getUser().send().message(callbackMessage);
+					}
+
 				}).setNickservPassword(password).setName(nick)
 				.setAutoNickChange(true).buildConfiguration());
 		new Thread() {
